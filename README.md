@@ -1,27 +1,39 @@
-# Claude Code Package 分析说明
+# Claude Code Package Research Notes
 
-这是一个已经打包好的 `@anthropic-ai/claude-code` npm 发布产物目录，而不是完整的原始开发仓库。
+[English Version](./README_EN.md)
 
-当前目录里的核心内容包括：
+> [!IMPORTANT]
+> **本仓库内容仅供学习、研究与技术分析使用。**
+>
+> **当前代码及其相关内容的所有权、著作权及其他一切权益均归 Anthropic 公司所有。**
+>
+> 本仓库不主张、不转移，也不重新分配 Claude Code 原始代码或相关知识产权。
 
-- `cli.js`：发布给用户执行的单文件 CLI 入口，已经被打包压缩
-- `cli.js.map`：对应的 source map，用于将打包后的代码映射回源码位置
-- `package.json`：包元信息，当前版本为 `2.1.88`
-- `sdk-tools.d.ts`：Claude Code 内置工具的 TypeScript 类型定义
-- `vendor/`：随包分发的原生二进制文件
-- `recovered_source/`：从 source map / 发布产物中恢复出来的源码视图，便于分析实现结构
+## 概览
 
-## 项目定位
+当前目录是 `@anthropic-ai/claude-code` 的一个**已打包发布产物分析目录**，并不是 Anthropic 官方公开维护的完整原始开发仓库。
 
-Claude Code 是 Anthropic 提供的终端编程代理工具。它运行在命令行中，能够理解代码库、读取和编辑文件、执行终端命令、管理任务，并通过自然语言帮助开发者完成常见工程工作流。
+从现有文件结构判断，这里主要用于：
 
-从当前包内容可以判断，这份目录更接近：
+- 研究 Claude Code 的发布包结构
+- 分析 CLI 启动流程与模块组织
+- 查阅工具接口与类型定义
+- 理解其终端代理式工作模式
 
-1. **npm 发布产物**
-2. **可执行 CLI 分发包**
-3. **带有调试信息和恢复源码的分析目录**
+而不是作为上游源码仓库直接继续开发或宣称所有权。
 
-而不是常规意义上用于二次开发的源码仓库。
+## 快速信息
+
+| 项目 | 说明 |
+| --- | --- |
+| 包名 | `@anthropic-ai/claude-code` |
+| 当前版本 | `2.1.88` |
+| 运行环境 | Node.js `>=18.0.0` |
+| 主入口 | `cli.js` |
+| 调试映射 | `cli.js.map` |
+| 工具类型定义 | `sdk-tools.d.ts` |
+| 分析源码目录 | `recovered_source/` |
+| 平台二进制 | `vendor/` |
 
 ## 目录结构
 
@@ -34,6 +46,7 @@ Claude Code 是 Anthropic 提供的终端编程代理工具。它运行在命令
 ├── bun.lock
 ├── LICENSE.md
 ├── README.md
+├── README_EN.md
 ├── vendor/
 │   ├── audio-capture/
 │   └── ripgrep/
@@ -41,58 +54,46 @@ Claude Code 是 Anthropic 提供的终端编程代理工具。它运行在命令
     └── src/
 ```
 
-## 代码与架构分析
+## 这份代码是什么
 
-### 1. 启动入口
+这份目录更接近以下三者的结合：
 
-- `recovered_source/src/entrypoints/cli.tsx`
-- `recovered_source/src/main.tsx`
+1. **npm 发布产物**
+2. **可执行 CLI 分发包**
+3. **带 source map 与恢复源码的研究目录**
 
-`cli.tsx` 是轻量级启动入口，负责做几类“快速路径”分发，例如：
+这也是为什么这里会同时出现：
 
-- `--version`
-- 后台/守护进程相关命令
-- bridge / remote-control 模式
-- 某些 MCP 或浏览器集成入口
+- 体积很大的单文件 `cli.js`
+- 更大的 `cli.js.map`
+- 多平台二进制文件
+- `recovered_source/` 这样的恢复源码目录
 
-之后再按需动态加载完整 CLI。
+## 关键组成
 
-`main.tsx` 则是主程序装配入口，负责：
+### `cli.js`
 
-- 初始化配置与遥测
-- 解析 CLI 参数
-- 装载命令系统
-- 初始化 React/Ink 终端 UI
-- 装载技能（skills）、MCP、插件、权限系统、任务系统等
+发布给终端用户执行的单文件 CLI 入口，已经过打包压缩，通常通过：
 
-这说明 Claude Code 的 CLI 并不是简单脚本，而是一个比较完整的交互式终端应用。
+```bash
+claude
+```
 
-### 2. 会话与查询引擎
+或：
 
-- `recovered_source/src/QueryEngine.ts`
+```bash
+node cli.js --version
+```
 
-`QueryEngine` 是对话执行核心之一，负责：
+进行调用。
 
-- 管理一轮轮用户消息提交
-- 维护会话消息状态
-- 调用工具权限判断
-- 组织系统提示词与上下文
-- 跟踪使用量、预算、文件状态与中断控制
+### `cli.js.map`
 
-从这里可以看出，Claude Code 的核心模式是：
+source map 文件，用于把打包后的代码映射回原始源码位置，便于调试和分析。
 
-- 用户输入
-- 组装上下文
-- 模型推理
-- 工具调用
-- 更新会话状态
-- 继续下一轮
+### `sdk-tools.d.ts`
 
-### 3. 工具系统
-
-- `sdk-tools.d.ts`
-
-类型定义中可以直接看到大量内置工具，例如：
+Claude Code 内置工具的 TypeScript 类型定义，可以直接看到它暴露出的工具输入输出模型，例如：
 
 - `Agent`
 - `Bash`
@@ -106,110 +107,129 @@ Claude Code 是 Anthropic 提供的终端编程代理工具。它运行在命令
 - `AskUserQuestion`
 - `EnterWorktree` / `ExitWorktree`
 - `ExitPlanMode`
-- `TaskOutput` / `TaskStop`
 
-这表明 Claude Code 的能力不是单纯聊天，而是通过“模型 + 工具调用”来完成工程任务。
+### `vendor/`
 
-### 4. 终端 UI 与交互方式
+发布包附带的多平台二进制资源：
 
-从 `main.tsx` 的导入可以看出，项目使用了 React + Ink 风格的终端 UI 结构，支持：
+- `vendor/ripgrep/`：内置 `rg`，用于高性能全文搜索
+- `vendor/audio-capture/`：原生 `.node` 模块，说明其支持音频采集相关能力
 
-- 交互式 REPL
+### `recovered_source/`
+
+从发布产物和映射信息中恢复出的源码视图，适合做结构研究和行为分析。
+
+## 代码架构分析
+
+### 1. CLI 启动入口
+
+- `recovered_source/src/entrypoints/cli.tsx`
+- `recovered_source/src/main.tsx`
+
+`entrypoints/cli.tsx` 是较轻量的入口，负责处理若干快速路径，例如：
+
+- `--version`
+- 后台会话 / 守护进程相关命令
+- remote-control / bridge 模式
+- 某些 MCP 或浏览器集成入口
+
+随后再按需加载完整主程序。
+
+`main.tsx` 则负责主程序装配，包括：
+
+- 初始化配置
+- 解析 CLI 参数
+- 初始化终端 UI
+- 装载命令系统、技能系统、插件系统与 MCP 支持
+- 初始化权限、任务、恢复会话等运行机制
+
+### 2. QueryEngine 会话核心
+
+- `recovered_source/src/QueryEngine.ts`
+
+`QueryEngine` 是 Claude Code 对话执行模型的重要核心之一，负责：
+
+- 管理用户消息与会话状态
+- 组织系统提示词与上下文
+- 协调工具调用和权限判断
+- 跟踪用量、预算、文件状态与中断控制
+
+其核心运行逻辑可以概括为：
+
+1. 接收用户输入
+2. 组装系统上下文
+3. 调用模型推理
+4. 执行工具调用
+5. 更新状态并进入下一轮
+
+### 3. 终端 UI 形态
+
+从 `main.tsx` 的导入关系可以看出，这个 CLI 不只是普通命令脚本，而是更接近一个基于 React / Ink 思路构建的交互式终端应用，支持：
+
+- REPL 式对话
 - 会话恢复
-- 权限弹窗/确认
-- 插件与 MCP 相关对话框
-- 任务与后台会话管理
-- IDE / 浏览器 / 远程控制相关集成
-
-### 5. vendor 二进制文件
-
-`vendor/` 目录里包含两类重要二进制资产：
-
-#### `vendor/ripgrep/`
-
-内置多平台 `rg` 可执行文件，用于高性能全文搜索。
-
-#### `vendor/audio-capture/`
-
-内置多平台原生 `.node` 模块，说明该工具具备音频采集/语音相关能力支持。
-
-### 6. 为什么说这不是完整源码仓库
-
-有几个明显特征：
-
-- 主执行文件是单个巨大 `cli.js`
-- 同时附带体积更大的 `cli.js.map`
-- 发布包中包含平台相关二进制
-- `package.json` 几乎没有普通开发依赖
-- 存在 `recovered_source/` 这类用于恢复/分析源码的目录
-
-因此，这个目录更适合作为：
-
-- 发布产物分析
-- CLI 行为研究
-- 类型与工具接口查阅
-- 启动流程与架构理解
-
-而不太适合作为标准上游开发仓库直接继续维护。
+- 权限确认
+- 技能与插件装载
+- MCP 集成
+- 后台任务与多会话管理
+- IDE、浏览器与远程能力集成
 
 ## 可以确认的主要能力
 
-结合当前目录与恢复源码，可以较明确地判断 Claude Code 具备以下能力：
+基于当前目录与恢复源码，可以较明确地判断 Claude Code 具备以下能力：
 
-- 终端内对话式编程协助
+- 在终端中进行自然语言编程协助
 - 读取、编辑、写入本地文件
 - 执行 shell / bash 命令
-- 代码库搜索与文件发现
-- 任务管理与后台任务
-- 计划模式与分步执行
-- Git / PR / review 相关流程支持
-- MCP 扩展能力
-- 插件与 skills 机制
-- 会话恢复与远程/桥接模式
+- 搜索代码与发现文件
+- 管理任务与后台会话
+- 进行分步计划与执行
+- 支持 Git / review / PR 相关流程
+- 通过 MCP 扩展能力
+- 通过 skills / plugins 扩展交互模式
+- 支持会话恢复、远程连接和桥接模式
 
-## 关键文件说明
+## 为什么这不是标准源码仓库
 
-- `package.json`：包名、版本、Node 要求、bin 入口
-- `cli.js`：实际发布执行入口
-- `cli.js.map`：调试映射
-- `sdk-tools.d.ts`：工具 schema 类型定义
+有几个非常明显的判断依据：
+
+- 主执行逻辑被打包成单文件 `cli.js`
+- 存在体积很大的 `cli.js.map`
+- 包中携带多平台原生二进制
+- `package.json` 更像发布包元数据，而不是开发仓库配置
+- 目录中包含 `recovered_source/` 这类研究型恢复源码内容
+
+因此，这里更适合作为：
+
+- 发布包研究样本
+- CLI 架构分析材料
+- 工具接口参考目录
+- 启动流程与执行模型的学习资料
+
+## 关键文件索引
+
+- `package.json`：包名、版本、Node 要求、二进制入口
+- `cli.js`：发布后的实际 CLI 入口
+- `cli.js.map`：source map
+- `sdk-tools.d.ts`：工具接口类型定义
 - `recovered_source/src/entrypoints/cli.tsx`：启动分发入口
 - `recovered_source/src/main.tsx`：主程序装配入口
 - `recovered_source/src/QueryEngine.ts`：对话执行核心
 
-## 运行要求
+## 使用与研究边界
 
-根据 `package.json`：
+再次强调：
 
-- Node.js `>=18.0.0`
-
-典型入口命令：
-
-```bash
-node cli.js --version
-```
-
-如果该包以全局 npm 包形式安装，则通常通过：
-
-```bash
-claude
-```
-
-启动。
+- 本仓库内容仅供学习、研究与技术分析
+- 相关代码与内容权益归 **Anthropic** 所有
+- 本 README 旨在描述结构与用途，不构成任何权利声明或许可授予
 
 ## 结论
 
-当前代码目录本质上是 Claude Code 的一个**已发布打包版本分析包**。它展示了 Claude Code 的几个关键设计点：
+这个目录本质上是一个 **Claude Code 发布包研究仓库**。它最有价值的部分在于：
 
-- 单文件打包发布
-- 动态加载的 CLI 启动流程
-- 以 QueryEngine 为核心的会话执行模型
-- 丰富的工具调用体系
-- 与终端 UI、插件、MCP、权限、任务系统的深度集成
+- 能帮助理解 Claude Code 的 CLI 启动方式
+- 能帮助分析其工具驱动型代理架构
+- 能帮助查阅工具接口与发布产物组织方式
 
-如果你的目标是：
-
-- **理解产品能力**：这个目录足够
-- **研究工具接口**：`sdk-tools.d.ts` 很有价值
-- **分析启动与调度流程**：重点看 `entrypoints/cli.tsx`、`main.tsx`、`QueryEngine.ts`
-- **作为上游源码继续开发**：不建议直接基于这个目录进行常规维护
+如果你的目标是理解产品结构，这个仓库已经足够有参考价值；如果你的目标是作为 Anthropic 官方上游源码继续维护，则不应把这里视为标准开发仓库。
