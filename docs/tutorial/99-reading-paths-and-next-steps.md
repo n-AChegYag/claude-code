@@ -1,5 +1,7 @@
 # Claude Code 源码学习教程 99：继续深挖的阅读路径
 
+[English Version](./99-reading-paths-and-next-steps_EN.md)
+
 如果你已经读完前面的章节，这里给你几条不同目的的继续学习路径。
 
 ## 路线一：想理解“Claude Code 为什么像一个操作系统壳层”
@@ -84,6 +86,27 @@
 - built-in agent 如何体现角色约束
 - agent 与普通工具为什么共享同一能力治理体系
 
+## 路线六：想理解“Claude Code 如何扩展自己”
+
+按这个顺序继续精读：
+
+1. `recovered_source/src/main.tsx`
+2. `recovered_source/src/services/mcp/config.ts`
+3. `recovered_source/src/services/mcp/client.ts`
+4. `recovered_source/src/utils/plugins/loadPluginCommands.ts`
+5. `recovered_source/src/skills/bundledSkills.ts`
+6. `recovered_source/src/skills/loadSkillsDir.ts`
+7. `recovered_source/src/commands.ts`
+
+重点关注：
+
+- MCP 服务器如何进入当前会话
+- plugin commands / plugin skills 如何被加载
+- plugin-provided MCP 如何并入统一配置流程
+- bundled skills 与磁盘 skills 如何装配
+- dynamic skills 如何随文件路径被发现和激活
+- 这些扩展最终如何汇入命令表与工具池
+
 ## 推荐的二刷方法
 
 第一遍看结构，第二遍看边界。
@@ -108,17 +131,17 @@
 
 如果这套教程起作用，你现在应该能用一句话描述这个项目：
 
-> Claude Code 是一个以 QueryEngine 为会话核心、以工具系统为能力边界、以命令/输入系统为交互入口、以任务/设置/记忆系统为持续状态支撑的终端代理应用。
+> Claude Code 是一个以 QueryEngine 为会话核心、以工具系统为能力边界、以命令/输入系统为交互入口、以任务/设置/记忆系统为持续状态支撑、并通过 MCP / plugins / skills 持续扩展能力面的终端代理应用。
 
 ## 如果你要继续扩展这套教程
 
 后续还可以继续补写这些专题：
 
-- MCP 体系与外部能力接入
 - 权限系统与安全策略
 - session restore / transcript 体系
-- plugin / skill 的加载与扩展模型
 - REPL UI 层与 Ink 组件树
+- analytics / telemetry 与启动期预热机制
+- worktree / background sessions / remote-control 相关能力
 
 这些都值得单独拆成深挖章节。
 

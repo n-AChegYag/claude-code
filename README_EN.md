@@ -19,8 +19,27 @@ Based on the current file layout, it is primarily useful for:
 - analyzing CLI startup and module organization
 - reviewing tool interfaces and type definitions
 - understanding its terminal-first agent workflow
+- learning the system through repository-local tutorial documentation
 
-It should not be treated as an ownership claim or as the canonical upstream source repository.
+In other words, this repository now serves not only as a research sample, but also as a **tutorial-oriented analysis repository** built on top of the recovered source view.
+
+## Repository Positioning
+
+It is best to think of this project as a combination of:
+
+1. **an npm release artifact research sample**
+2. **a recovered-source analysis directory**
+3. **a Claude Code learning and tutorial documentation repository**
+
+If your goal is to:
+
+- learn how Claude Code boots and initializes
+- understand QueryEngine, the tool system, the command system, and the persistence layers
+- study extension surfaces such as MCP, plugins, and skills
+
+then this repository is already a very useful reading base.
+
+If your goal is to work from Anthropic’s official upstream source repository, this should not be treated that way.
 
 ## Quick Facts
 
@@ -34,6 +53,7 @@ It should not be treated as an ownership claim or as the canonical upstream sour
 | Tool definitions | `sdk-tools.d.ts` |
 | Recovered source view | `recovered_source/` |
 | Platform binaries | `vendor/` |
+| Tutorial docs | `docs/tutorial/` |
 
 ## Repository Layout
 
@@ -47,6 +67,8 @@ It should not be treated as an ownership claim or as the canonical upstream sour
 ├── LICENSE.md
 ├── README.md
 ├── README_EN.md
+├── docs/
+│   └── tutorial/
 ├── vendor/
 │   ├── audio-capture/
 │   └── ripgrep/
@@ -68,6 +90,70 @@ That is why it contains:
 - an even larger `cli.js.map`
 - platform-specific binaries
 - a `recovered_source/` directory intended for analysis
+
+## What the Tutorial Covers
+
+The repository now includes a source-learning tutorial series under:
+
+- Chinese index: `docs/tutorial/00-overview.md`
+- English index: `docs/tutorial/00-overview_EN.md`
+
+The tutorial currently covers the following topics:
+
+1. **Overview and reading map**
+   - repository positioning
+   - recommended reading order
+   - a high-level mental model for Claude Code
+2. **Bootstrap and startup**
+   - `entrypoints/cli.tsx`
+   - `main.tsx`
+   - fast paths and runtime assembly
+3. **QueryEngine and the conversation loop**
+   - multi-turn session state
+   - system prompt / context assembly
+   - query loop and tool execution
+4. **Input processing, commands, and hooks**
+   - `commands.ts`
+   - `processUserInput.ts`
+   - slash commands and pre-query processing
+5. **Tools and agent execution**
+   - `tools.ts`
+   - representative tools such as FileRead, Bash, and Agent
+   - permissions and role-based constraints
+6. **Tasks, settings, and session memory**
+   - `tasks.ts`
+   - `settings.ts`
+   - `sessionMemory.ts`
+7. **MCP, plugins, and skills deep dive**
+   - MCP configuration and connection loading
+   - plugin commands / plugin skills / plugin-provided MCP
+   - bundled skills / on-disk skills / dynamic skill discovery
+8. **Reading paths and next steps**
+   - guided deep-reading routes for different learning goals
+
+## Tutorial Entry Points
+
+### Chinese tutorial
+
+- [00 Overview and reading map](./docs/tutorial/00-overview.md)
+- [01 Bootstrap and startup](./docs/tutorial/01-bootstrap-and-startup.md)
+- [02 QueryEngine and conversation loop](./docs/tutorial/02-query-engine-and-conversation-loop.md)
+- [03 Input processing, commands, and hooks](./docs/tutorial/03-input-commands-and-hooks.md)
+- [04 Tools and agent execution](./docs/tutorial/04-tools-and-agent-execution.md)
+- [05 Tasks, settings, and session memory](./docs/tutorial/05-state-tasks-settings-and-memory.md)
+- [06 MCP, plugins, and skills](./docs/tutorial/06-mcp-plugins-and-skills.md)
+- [99 Reading paths and next steps](./docs/tutorial/99-reading-paths-and-next-steps.md)
+
+### English tutorial
+
+- [00 Overview and reading map](./docs/tutorial/00-overview_EN.md)
+- [01 Bootstrap and startup](./docs/tutorial/01-bootstrap-and-startup_EN.md)
+- [02 QueryEngine and conversation loop](./docs/tutorial/02-query-engine-and-conversation-loop_EN.md)
+- [03 Input, commands, and hooks](./docs/tutorial/03-input-commands-and-hooks_EN.md)
+- [04 Tools and agent execution](./docs/tutorial/04-tools-and-agent-execution_EN.md)
+- [05 Tasks, settings, and session memory](./docs/tutorial/05-state-tasks-settings-and-memory_EN.md)
+- [06 MCP, plugins, and skills](./docs/tutorial/06-mcp-plugins-and-skills_EN.md)
+- [99 Reading paths and next steps](./docs/tutorial/99-reading-paths-and-next-steps_EN.md)
 
 ## Key Components
 
@@ -203,6 +289,7 @@ Because of that, this repository is better suited for:
 - CLI architecture analysis
 - tool interface reference
 - learning the startup and execution model
+- tutorial-based source reading
 
 ## Key File Index
 
@@ -224,10 +311,11 @@ To restate the boundary clearly:
 
 ## Conclusion
 
-In practice, this directory is best viewed as a **Claude Code package research repository**. Its main value lies in helping readers:
+In practice, this directory is best viewed as a **Claude Code package research repository plus tutorial documentation repository**. Its main value lies in helping readers:
 
 - understand how the Claude Code CLI is packaged and bootstrapped
 - inspect its tool-driven agent architecture
-- review its tool interfaces and distribution layout
+- systematically learn its command, tool, persistence, and extension layers
+- study the codebase through a bilingual tutorial set
 
 If your goal is to understand the product structure, this repository is informative. If your goal is to work from Anthropic's official upstream source, this should not be treated as the canonical development repository.

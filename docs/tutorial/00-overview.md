@@ -1,24 +1,26 @@
 # Claude Code 源码学习教程 00：总览与阅读地图
 
+[English Version](./00-overview_EN.md)
+
 ## 这份教程适合谁
 
 这套教程面向两类读者：
 
 1. 想系统理解 Claude Code 这类终端代理式 CLI 如何组织架构的人。
-2. 想把当前仓库当作“源码分析样本”来学习启动流程、工具系统、任务系统、设置系统的人。
+2. 想把当前仓库当作“源码分析样本”来学习启动流程、工具系统、任务系统、设置系统，以及扩展机制的人。
 
 ## 先说清楚：这是什么仓库
 
-当前目录不是 Anthropic 官方公开维护的上游开发仓库，而是一个**已打包发布产物 + 恢复源码视图**的分析目录。这个定位在仓库自己的说明里已经写得很明确：`README.md:14` 把它定义为“已打包发布产物分析目录”，`README.md:118` 说明 `recovered_source/` 是从发布产物和映射信息中恢复出的源码视图。
+当前目录不是 Anthropic 官方公开维护的上游开发仓库，而是一个**已打包发布产物 + 恢复源码视图**的分析目录。这个定位在仓库自己的说明里已经写得很明确：`README.md:12-23` 把它定义为研究与教程型分析仓库，`README.md:153-156` 说明 `recovered_source/` 是从发布产物和映射信息中恢复出的源码视图。
 
 因此，学习这个项目时要带着两个前提：
 
 - 你看到的是**适合研究的恢复源码**，不是官方原始工程组织形态。
-- 这里特别适合做**架构理解、运行机制拆解、工具能力观察**，不适合把它当作官方二次开发基座。
+- 这里特别适合做**架构理解、运行机制拆解、工具能力观察、扩展机制学习**，不适合把它当作官方二次开发基座。
 
 ## 这个包的顶层结构
 
-结合 `README.md:27`、`README.md:38` 和 `package.json:2` 可以把顶层目录先记成下面这张图：
+结合 `README.md:37-58` 和 `package.json:2-13` 可以把顶层目录先记成下面这张图：
 
 ```text
 package/
@@ -26,6 +28,7 @@ package/
 ├── cli.js.map            # source map，帮助恢复源码
 ├── package.json          # npm 包元数据，声明包名/版本/bin
 ├── sdk-tools.d.ts        # 工具接口类型定义
+├── docs/tutorial/        # 教程文档
 ├── vendor/               # 随包分发的原生/辅助二进制
 └── recovered_source/     # 从发布物恢复出的源码主视图
 ```
@@ -33,16 +36,16 @@ package/
 其中最值得学习的几块是：
 
 - `package.json:2-13`：确认这是 `@anthropic-ai/claude-code`，以及 CLI 的入口是 `cli.js`。
-- `README.md:124-175`：已经给出了一版简明架构概览。
+- `README.md`：仓库定位、研究边界、教程入口。
 - `recovered_source/src/`：真正的学习主战场。
 
 ## 如何理解这个项目
 
 如果只用一句话概括，可以把 Claude Code 看成：
 
-> 一个基于终端交互界面运行的、由大模型驱动的“会话执行器”，它把命令系统、工具系统、权限系统、状态系统和子代理系统拼装在一起。
+> 一个基于终端交互界面运行的、由大模型驱动的“会话执行器”，它把命令系统、工具系统、权限系统、状态系统和子代理系统拼装在一起，并通过 MCP、插件、skills 等机制继续扩展能力边界。
 
-它不是普通的“一次性命令行工具”，而是更接近一个持续运行的交互式应用。仓库说明也已经点出了这一点：`README.md:165-175` 提到它具备 REPL 式对话、权限确认、会话恢复、技能/插件装载、MCP 集成、后台任务等能力。
+它不是普通的“一次性命令行工具”，而是更接近一个持续运行的交互式应用。仓库说明也已经点出了这一点：`README.md:204-212` 提到它具备 REPL 式对话、权限确认、会话恢复、技能/插件装载、MCP 集成、后台任务等能力。
 
 ## 推荐学习顺序
 
@@ -53,6 +56,7 @@ package/
 3. **交互层**：slash commands、hooks、附件输入如何进入系统。
 4. **工具层**：Claude Code 为什么能读文件、改文件、跑命令、开子代理。
 5. **状态层**：任务、设置、记忆如何落盘与复用。
+6. **扩展层**：MCP、插件、skills 如何接入 Claude Code。
 
 建议按下面顺序阅读：
 
@@ -61,6 +65,7 @@ package/
 - [03-input-commands-and-hooks.md](./03-input-commands-and-hooks.md)
 - [04-tools-and-agent-execution.md](./04-tools-and-agent-execution.md)
 - [05-state-tasks-settings-and-memory.md](./05-state-tasks-settings-and-memory.md)
+- [06-mcp-plugins-and-skills.md](./06-mcp-plugins-and-skills.md)
 - [99-reading-paths-and-next-steps.md](./99-reading-paths-and-next-steps.md)
 
 ## 整体心智模型
@@ -75,6 +80,7 @@ CLI 入口
   -> 生成模型请求
   -> 执行工具调用
   -> 更新会话状态
+  -> 根据 MCP / plugins / skills 扩展能力面
   -> 继续下一轮交互
 ```
 
@@ -89,6 +95,7 @@ CLI 入口
 - 任务系统：`recovered_source/src/utils/tasks.ts:199-438`
 - 设置系统：`recovered_source/src/utils/settings/settings.ts:74-220`
 - 会话记忆：`recovered_source/src/services/SessionMemory/sessionMemory.ts:134-319`
+- MCP / plugins / skills：见 `recovered_source/src/services/mcp/`、`recovered_source/src/utils/plugins/`、`recovered_source/src/skills/`
 
 ## 学习这份源码时最有价值的观察点
 
@@ -107,6 +114,10 @@ CLI 入口
 ### 4. 它把“工程安全边界”写进了工具实现里
 
 例如：读文件工具会阻止危险设备文件；Bash 工具里有安全解析、只读约束、后台任务治理；Explore 这类子代理被显式限制为只读。
+
+### 5. 它把“可扩展性”做成了多层机制
+
+Claude Code 不只依靠内建命令和工具，还通过 MCP、plugins、skills 把命令、工具、资源、提示词扩展到主程序内部。
 
 ## 阅读方法建议
 
