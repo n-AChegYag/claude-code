@@ -137,11 +137,11 @@ If this tutorial has done its job, you should now be able to describe the projec
 
 Good future deep-dive topics include:
 
-- the permission system and security policy model
 - session restore / transcript mechanisms
 - the REPL UI layer and Ink component tree
 - analytics / telemetry and startup prefetch behavior
 - worktree / background sessions / remote-control features
+- deeper hook / classifier / policy interactions inside the permission system
 
 Each of those would support a dedicated chapter.
 

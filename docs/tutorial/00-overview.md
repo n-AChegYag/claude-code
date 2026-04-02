@@ -57,6 +57,7 @@ package/
 4. **工具层**：Claude Code 为什么能读文件、改文件、跑命令、开子代理。
 5. **状态层**：任务、设置、记忆如何落盘与复用。
 6. **扩展层**：MCP、插件、skills 如何接入 Claude Code。
+7. **安全层**：权限模式、路径保护、shell 安全与工作流边界如何协同工作。
 
 建议按下面顺序阅读：
 
@@ -66,6 +67,7 @@ package/
 - [04-tools-and-agent-execution.md](./04-tools-and-agent-execution.md)
 - [05-state-tasks-settings-and-memory.md](./05-state-tasks-settings-and-memory.md)
 - [06-mcp-plugins-and-skills.md](./06-mcp-plugins-and-skills.md)
+- [07-permissions-and-security-boundaries.md](./07-permissions-and-security-boundaries.md)
 - [99-reading-paths-and-next-steps.md](./99-reading-paths-and-next-steps.md)
 
 ## 整体心智模型

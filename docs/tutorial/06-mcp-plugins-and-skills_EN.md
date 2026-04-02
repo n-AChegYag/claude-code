@@ -290,4 +290,4 @@ All three eventually get absorbed into the runtime’s command table, tool pool,
 
 ## Next chapter
 
-Continue to [99-reading-paths-and-next-steps_EN.md](./99-reading-paths-and-next-steps_EN.md).
+Continue to [07-permissions-and-security-boundaries_EN.md](./07-permissions-and-security-boundaries_EN.md).

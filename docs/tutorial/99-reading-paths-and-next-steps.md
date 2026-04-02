@@ -137,11 +137,11 @@
 
 后续还可以继续补写这些专题：
 
-- 权限系统与安全策略
 - session restore / transcript 体系
 - REPL UI 层与 Ink 组件树
 - analytics / telemetry 与启动期预热机制
 - worktree / background sessions / remote-control 相关能力
+- 权限系统中的 hook / classifier / policy 交互细节
 
 这些都值得单独拆成深挖章节。
 

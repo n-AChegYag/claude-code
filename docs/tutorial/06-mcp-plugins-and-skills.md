@@ -292,4 +292,4 @@ all of the above
 
 ## 下一章
 
-继续阅读 [99-reading-paths-and-next-steps.md](./99-reading-paths-and-next-steps.md)。
+继续阅读 [07-permissions-and-security-boundaries.md](./07-permissions-and-security-boundaries.md)。

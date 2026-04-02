@@ -57,6 +57,7 @@ This tutorial is organized from the outside inward:
 4. **Tool layer**: why Claude Code can read files, edit files, run commands, and spawn sub-agents.
 5. **Persistence layer**: how tasks, settings, and memory are stored and reused.
 6. **Extension layer**: how MCP, plugins, and skills plug into Claude Code.
+7. **Security layer**: how permission modes, path protection, shell safety, and workflow boundaries work together.
 
 Recommended chapter order:
 
@@ -66,6 +67,7 @@ Recommended chapter order:
 - [04-tools-and-agent-execution_EN.md](./04-tools-and-agent-execution_EN.md)
 - [05-state-tasks-settings-and-memory_EN.md](./05-state-tasks-settings-and-memory_EN.md)
 - [06-mcp-plugins-and-skills_EN.md](./06-mcp-plugins-and-skills_EN.md)
+- [07-permissions-and-security-boundaries_EN.md](./07-permissions-and-security-boundaries_EN.md)
 - [99-reading-paths-and-next-steps_EN.md](./99-reading-paths-and-next-steps_EN.md)
 
 ## A practical mental model

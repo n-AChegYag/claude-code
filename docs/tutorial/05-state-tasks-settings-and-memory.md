@@ -234,4 +234,4 @@
 
 ## 下一章
 
-继续阅读 [99-reading-paths-and-next-steps.md](./99-reading-paths-and-next-steps.md)。
+继续阅读 [06-mcp-plugins-and-skills.md](./06-mcp-plugins-and-skills.md)。
