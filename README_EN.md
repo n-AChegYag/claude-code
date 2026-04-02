@@ -5,92 +5,39 @@
 > [!IMPORTANT]
 > **This project is provided for learning, research, and technical analysis only.**
 >
-> **All ownership, copyright, and all other rights related to the code and associated materials remain with Anthropic.**
+> **All Claude Code code and all related rights remain with Anthropic.**
 >
 > This project does not claim, transfer, or redistribute the original Claude Code codebase or its intellectual property.
 
-## Project Overview
+## Project Positioning
 
-The central theme of this repository is: **learning from, observing, and providing an introductory interpretation of the Claude Code source**.
+This repository is a learning-oriented project centered on **studying and providing an introductory interpretation of the Claude Code source**.
 
-More precisely, this is not Anthropic’s official public upstream development repository. It is a learning-oriented workspace organized around the packaged `@anthropic-ai/claude-code` distribution, a recovered source view, and a growing set of tutorial documents.
+It is not Anthropic’s official upstream development repository. Instead, it is a research-oriented workspace built around the currently visible packaged artifacts, a recovered source view, and tutorial documents derived from reading and organizing those materials.
 
-The main goals of this project are:
+## What you can find here
 
-- to understand Claude Code at the architectural level
-- to study its CLI bootstrap path and main runtime assembly
-- to observe key subsystems such as QueryEngine, the command system, the tool system, the task system, and the settings system
-- to provide an introductory breakdown of extension surfaces such as MCP, plugins, skills, the permission model, and security boundaries
-- to turn that learning into structured tutorial documentation and reading paths
-
-Because of that, this repository is best understood as:
-
-> a learner-oriented repository for studying and introducing the Claude Code source.
-
-## Research and Learning Boundaries
-
-A few boundaries should be made explicit:
-
-1. This project is intended only for **learning, research, technical analysis, and explanatory documentation**.
-2. This project is not Anthropic’s official source repository and should not be treated as official implementation documentation.
-3. All rights related to the code remain with **Anthropic**.
-4. The interpretations, breakdowns, and tutorials in this repository are learning-oriented summaries based on the visible directory contents and do not constitute any ownership claim.
-
-If your goal is to:
-
-- study the overall structure of Claude Code
-- build a working understanding of major subsystem responsibilities
-- follow a guided reading path through the code
-- use this repository as a sample for analyzing an agentic terminal-first CLI
-
-then this project is well suited to that purpose.
-
-If your goal is to treat this repository as Anthropic’s official upstream engineering base, it should not be used that way.
-
-## What the Current Directory Contains
-
-The current directory mainly consists of the following parts:
-
-```text
-.
-├── cli.js
-├── cli.js.map
-├── package.json
-├── sdk-tools.d.ts
-├── README.md
-├── README_EN.md
-├── docs/
-│   └── tutorial/
-├── vendor/
-└── recovered_source/
-    └── src/
-```
-
-A simple way to think about these components is:
+This repository currently includes:
 
 - `cli.js`: the bundled CLI entry point
-- `cli.js.map`: the source map used to help reconstruct and locate source structure
-- `sdk-tools.d.ts`: TypeScript definitions for Claude Code’s built-in tools
-- `recovered_source/`: a recovered source view derived from the packaged artifact
+- `cli.js.map`: the source map
+- `sdk-tools.d.ts`: built-in tool type definitions
+- `recovered_source/`: the recovered source view
 - `docs/tutorial/`: tutorial documents organized around source reading
 
-## Source Themes This Project Focuses On
+## What this project focuses on
 
-At the moment, this repository focuses on these themes in its study and introductory interpretation of Claude Code:
+At the moment, the project mainly focuses on these Claude Code topics:
 
-- startup flow: how the CLI enters the main runtime
-- the main loop: how QueryEngine organizes multi-turn sessions
-- input handling: how commands, hooks, and attachments enter the system
-- the tool system: how capabilities such as Read, Edit, Bash, and Agent are structured and constrained
-- persistent state: how tasks, settings, and session memory support long-running workflows
-- extension surfaces: how MCP, plugins, and skills connect to the main runtime
-- safety boundaries: how permission modes, path protection, shell safety, and workflow boundaries interact
-
-The goal here is not to “reconstruct official design documentation,” but to build a structured and readable learning path based on the code and materials visible in this directory.
+- CLI bootstrap and main runtime assembly
+- QueryEngine and the conversation loop
+- input handling, commands, and hooks
+- the tool system and sub-agent execution
+- persistent state systems such as tasks, settings, and session memory
+- extension surfaces such as MCP, plugins, and skills
+- the permission system and security boundaries
 
 ## Tutorial Entry Points
-
-This repository already includes a tutorial set that serves as a guided reading path for source learning.
 
 ### Chinese tutorial
 
@@ -116,25 +63,17 @@ This repository already includes a tutorial set that serves as a guided reading 
 - [07 Permissions and security boundaries](./docs/tutorial/07-permissions-and-security-boundaries_EN.md)
 - [99 Reading paths and next steps](./docs/tutorial/99-reading-paths-and-next-steps_EN.md)
 
-## The Value of This Project
+## Usage Boundary
 
-The value of this project does not come from replacing the official source repository. Its value comes from:
-
-- offering a more accessible entry point for learning Claude Code
-- turning a scattered recovered source view into a structured set of study themes
-- helping readers build an initial understanding of major responsibilities, runtime flow, and system boundaries
-- providing a tutorial and note-taking base for deeper future source analysis
-
-## Statement
-
-To restate the boundary clearly:
+Please note:
 
 - this project is for learning, research, and technical analysis only
-- the Claude Code code and all related rights remain with **Anthropic**
-- the tutorials, explanations, and introductory interpretations in this repository do not constitute any ownership claim and do not imply any official authorization
+- this project does not represent Anthropic’s official implementation documentation
+- all Claude Code code and related rights remain with **Anthropic**
+- the explanations, interpretations, and tutorials in this repository do not constitute any ownership claim or official authorization
 
-## Closing Note
+## Short Note
 
-If you want to use this repository as a **Claude Code source-learning sample**, it is well suited for that purpose.
+If you want to use this repository as a **Claude Code source-learning sample**, it is well suited to that purpose.
 
-If your goal is to quickly build an introductory understanding of Claude Code’s startup flow, main loop, tool system, extension surfaces, and safety boundaries, then the tutorials and documentation in this repository are designed exactly for that purpose.
+If your goal is to build a quicker introductory understanding of Claude Code’s startup flow, main loop, tool system, extension surfaces, and safety boundaries, the tutorial documents here are intended to support exactly that goal.
